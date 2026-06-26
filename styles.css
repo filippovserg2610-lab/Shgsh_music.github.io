@@ -1,0 +1,272 @@
+/* ===== БАЗОВЫЙ СТИЛЬ TELEGRAM ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #0a0a0a;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.telegram-app {
+    max-width: 480px;
+    width: 100%;
+    min-height: 100vh;
+    background: #0f0f1a;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* ===== ШАПКА КАК В TELEGRAM ===== */
+.tg-header {
+    background: #1a1a2e;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #2a2a4a;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    min-height: 56px;
+}
+
+.tg-back-btn {
+    background: none;
+    border: none;
+    color: #6c5ce7;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0 4px;
+    width: 40px;
+    text-align: left;
+    font-weight: 300;
+}
+
+.tg-back-btn:hover {
+    opacity: 0.7;
+}
+
+.tg-header-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #ffffff;
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== КОНТЕНТ ===== */
+.tg-content {
+    flex: 1;
+    padding: 12px 16px 100px;
+    overflow-y: auto;
+}
+
+/* ===== СООБЩЕНИЕ КАК В TELEGRAM ===== */
+.tg-message {
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    border: 1px solid #2a2a4a;
+}
+
+.tg-message-text {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #e0e0e0;
+}
+
+.tg-message-text strong {
+    color: #ffffff;
+}
+
+/* ===== INLINE-КНОПКИ КАК В TELEGRAM ===== */
+.tg-inline-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.tg-inline-btn {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4a;
+    border-radius: 10px;
+    color: #6c5ce7;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tg-inline-btn:active {
+    background: #2a2a4a;
+    transform: scale(0.96);
+}
+
+.tg-inline-btn-wide {
+    grid-column: 1 / -1;
+}
+
+/* ===== КНОПКА START КАК В TELEGRAM ===== */
+.tg-reply-markup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.tg-btn-start {
+    background: #6c5ce7;
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    width: 100%;
+}
+
+.tg-btn-start:active {
+    background: #5a4bd1;
+    transform: scale(0.98);
+}
+
+/* ===== ПЕСНИ КАК В TELEGRAM ===== */
+.tg-song-item {
+    background: #1a1a2e;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #2a2a4a;
+}
+
+.tg-song-name {
+    font-size: 14px;
+    color: #e0e0e0;
+    flex: 1;
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tg-song-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.tg-btn-inline-small {
+    background: #2a2a4a;
+    border: none;
+    border-radius: 8px;
+    color: #6c5ce7;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.tg-btn-inline-small:active {
+    background: #3a3a5a;
+    transform: scale(0.92);
+}
+
+/* ===== ПЛЕЕР КАК В TELEGRAM ===== */
+.tg-player {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 480px;
+    width: 100%;
+    background: #1a1a2e;
+    border-top: 1px solid #2a2a4a;
+    padding: 10px 16px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+}
+
+.tg-player-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: all 0.15s;
+}
+
+.tg-player-btn:active {
+    transform: scale(0.9);
+}
+
+.tg-player-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.tg-player-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tg-player-subtitle {
+    font-size: 12px;
+    color: #8888aa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 480px) {
+    .telegram-app {
+        max-width: 100%;
+    }
+    .tg-inline-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .tg-header-title {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 360px) {
+    .tg-inline-grid {
+        grid-template-columns: 1fr;
+    }
+    .tg-btn-inline-small {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+}
