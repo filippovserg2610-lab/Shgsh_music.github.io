@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Плейлист</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <button class="btn-back" onclick="window.location.href='seasons.html'">🔙</button>
+            <h1 id="seasonTitle">🎵 СЕЗОН</h1>
+        </div>
+
+        <div id="songList" class="song-list"></div>
+
+        <!-- Аудиоплеер -->
+        <div class="player-bar" id="playerBar" style="display:none;">
+            <button class="player-btn" id="playPauseBtn">▶️</button>
+            <div class="player-info">
+                <span id="currentSongName">Название</span>
+                <span id="currentSeasonName">Сезон</span>
+            </div>
+            <audio id="audioPlayer" controls style="display:none;"></audio>
+            <button class="player-btn" onclick="downloadCurrentSong()">⬇️</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const seasonId = params.get('season') || '8';
+
+        const season = SEASONS[seasonId];
+        const songs = season ? season.songs : [];
+        const seasonName = season ? season.name : 'СЕЗОН';
+
+        document.getElementById('seasonTitle').textContent = seasonName;
+
+        const songList = document.getElementById('songList');
+        const playerBar = document.getElementById('playerBar');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const currentSongName = document.getElementById('currentSongName');
+        const currentSeasonName = document.getElementById('currentSeasonName');
+
+        let currentSong = null;
+        let currentSongFile = null;
+
+        // Если сезон в разработке
+        if (season && season.dev) {
+            songList.innerHTML = `
+                <div class="dev-message">
+                    🚧 Этот сезон находится в разработке<br>
+                    🎵 Появится в будущих обновлениях!
+                </div>
+                <button class="btn-back-main" onclick="window.location.href='seasons.html'">🔙 НАЗАД</button>
+            `;
+        } else {
+            songs.forEach((song, index) => {
+                const item = document.createElement('div');
+                item.className = 'song-item';
+                item.innerHTML = `
+                    <span class="song-name">🎵 ${song}</span>
+                    <div class="song-actions">
+                        <button class="btn-play" onclick="playSong('${seasonId}', ${index})">▶️ Слушать</button>
+                        <button class="btn-download" onclick="downloadSong('${seasonId}', ${index})">⬇️</button>
+                    </div>
+                `;
+                songList.appendChild(item);
+            });
+        }
+
+        function getSongPath(seasonId, songName) {
+            const folder = SEASONS[seasonId]?.folder || 'unknown';
+            // Ищем файл в папке music/сезон/
+            return `music/${folder}/${encodeURIComponent(songName)}.mp3`;
+        }
+
+        function playSong(seasonId, index) {
+            const season = SEASONS[seasonId];
+            const song = season.songs[index];
+            const seasonName = season.name;
+            const songPath = getSongPath(seasonId, song);
+
+            currentSong = song;
+            currentSongFile = songPath;
+            currentSongName.textContent = song;
+            currentSeasonName.textContent = seasonName;
+
+            audioPlayer.src = songPath;
+            audioPlayer.load();
+            audioPlayer.play().catch(e => {
+                // Если файла нет, показываем ошибку
+                alert(`⚠️ Файл не найден: ${songPath}\n\nПоложите MP3 в папку music/${season.folder}/`);
+            });
+
+            playerBar.style.display = 'flex';
+            playPauseBtn.textContent = '⏸️';
+        }
+
+        function downloadSong(seasonId, index) {
+            const season = SEASONS[seasonId];
+            const song = season.songs[index];
+            const songPath = getSongPath(seasonId, song);
+
+            const link = document.createElement('a');
+            link.href = songPath;
+            link.download = `${song}.mp3`;
+            link.click();
+        }
+
+        // Управление плеером
+        audioPlayer.addEventListener('play', () => {
+            playPauseBtn.textContent = '⏸️';
+        });
+
+        audioPlayer.addEventListener('pause', () => {
+            playPauseBtn.textContent = '▶️';
+        });
+
+        playPauseBtn.addEventListener('click', () => {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+            } else {
+                audioPlayer.pause();
+            }
+        });
+
+        function downloadCurrentSong() {
+            if (currentSongFile) {
+                const link = document.createElement('a');
+                link.href = currentSongFile;
+                link.download = `${currentSong}.mp3`;
+                link.click();
+            }
+        }
+    </script>
+</body>
+</html>
