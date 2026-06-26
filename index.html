@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>ШГШ Музыка</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="telegram-app">
+        <!-- Шапка как в Telegram -->
+        <div class="tg-header">
+            <div class="tg-header-title">🎵 ШГШ Музыка</div>
+        </div>
+
+        <!-- Контент как сообщение в чате -->
+        <div class="tg-content">
+            <div class="tg-message">
+                <div class="tg-message-text">
+                    <strong>🎧 Добро пожаловать в музыкальный бот ШГШ!</strong>
+                </div>
+                <div class="tg-message-text" style="margin-top: 8px; opacity: 0.8;">
+                    Здесь ты найдёшь все треки из сезонов,<br>ремиксы и оригиналы
+                </div>
+            </div>
+
+            <!-- Кнопка Start как в Telegram -->
+            <div class="tg-reply-markup">
+                <button class="tg-btn-start" onclick="goToSeasons()">
+                    ▶️ НАЧАТЬ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToSeasons() {
+            window.location.href = 'seasons.html';
+        }
+    </script>
+</body>
+</html>

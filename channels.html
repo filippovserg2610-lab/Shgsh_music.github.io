@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Каналы</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="telegram-app">
+        <div class="tg-header">
+            <button class="tg-back-btn" onclick="window.location.href='seasons.html'">‹</button>
+            <div class="tg-header-title">📢 Каналы ШГШ</div>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <div class="tg-content">
+            <div class="tg-message">
+                <div class="tg-message-text">
+                    👇 <strong>Подписывайся на каналы:</strong>
+                </div>
+            </div>
+
+            <div class="tg-inline-grid" id="channelsGrid"></div>
+
+            <div class="tg-inline-grid" style="margin-top: 8px;">
+                <button class="tg-inline-btn tg-inline-btn-wide" onclick="window.location.href='seasons.html'">
+                    🔙 НАЗАД
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CHANNELS = {
+            "короче, Гладенко": "https://t.me/hladenko",
+            "Школьный Дневник ШГШ": "https://t.me/shgsh_novosti",
+            "ксеша 🐈‍⬛🐾": "https://t.me/kseshaxs",
+            "это Дима ШГШ": "https://t.me/dimonchikshgsh",
+            "Владошка 🔇": "https://t.me/vladanasv",
+            "Жизнь дерзкой Мухи": "https://t.me/derzkaya_myxa"
+        };
+
+        const grid = document.getElementById('channelsGrid');
+
+        for (const [name, link] of Object.entries(CHANNELS)) {
+            const btn = document.createElement('button');
+            btn.className = 'tg-inline-btn tg-inline-btn-wide';
+            btn.textContent = name;
+            btn.onclick = () => window.open(link, '_blank');
+            grid.appendChild(btn);
+        }
+    </script>
+</body>
+</html>
