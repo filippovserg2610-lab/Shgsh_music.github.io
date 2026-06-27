@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Плейлист</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="telegram-app">
+        <div class="tg-header">
+            <button class="tg-back-btn" onclick="window.location.href='seasons.html'">‹</button>
+            <div class="tg-header-title" id="seasonTitle">🎵 СЕЗОН</div>
+            <div style="width: 40px;"></div>
+        </div>
+        <div class="tg-content" id="songList"></div>
+    </div>
+
+    <!-- Аудиоплеер -->
+    <div class="tg-player" id="playerBar" style="display:none;">
+        <button class="tg-player-btn" id="playPauseBtn">▶️</button>
+        <div class="tg-player-info">
+            <div class="tg-player-title" id="currentSongName">Название</div>
+            <div class="tg-player-subtitle" id="currentSeasonName">Сезон</div>
+        </div>
+        <input type="range" id="progressBar" min="0" max="100" value="0" style="flex:1; accent-color:#6c5ce7;" />
+        <span id="timeDisplay" style="font-size:12px; color:#8888aa; min-width:40px;">0:00</span>
+        <button class="tg-player-btn" onclick="downloadCurrentSong()">⬇️</button>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        // ========== ПОЛУЧАЕМ СЕЗОН ==========
+        const params = new URLSearchParams(window.location.search);
+        const seasonId = params.get('season') || '8';
+        const season = SEASONS[seasonId];
+        const songs = season ? season.songs : [];
+        const seasonName = season ? season.name : 'СЕЗОН';
+        document.getElementById('seasonTitle').textContent = seasonName;
+        const songList = document.getElementById('songList');
+
+        // ========== ПЛЕЕР ==========
+        const playerBar = document.getElementById('playerBar');
+        const audioPlayer = document.getElementById('audioPlayer') || document.createElement('audio');
+        audioPlayer.id = 'audioPlayer';
+        audioPlayer.style.display = 'none';
+        document.body.appendChild(audioPlayer);
+
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const currentSongName = document.getElementById('currentSongName');
+        const currentSeasonName = document.getElementById('currentSeasonName');
+        const progressBar = document.getElementById('progressBar');
+        const timeDisplay = document.getElementById('timeDisplay');
+
+        let currentSong = null;
+        let currentSongFile = null;
+        let isUserSeeking = false;
+
+        // ========== ТОЧНЫЙ ПОИСК ПО ИМЕНИ ФАЙЛА ==========
+        async function findAudioFile(seasonFolder, song) {
+            const folder = `music/${seasonFolder}/`;
+            
+            // Если у песни указан точный файл — используем его
+            if (song.file && song.file.length > 0) {
+                const path = `${folder}${song.file}`;
+                try {
+                    const response = await fetch(path, { method: 'HEAD' });
+                    if (response.ok) {
+                        return path;
+                    }
+                } catch(e) {}
+            }
+            
+            // Если точного файла нет или он не найден — ищем по названию
+            const songName = song.name || song;
+            const formats = ['.mp3', '.m4a', '.mp4', '.ogg', '.wav', '.aac'];
+            const variants = [
+                songName,
+                songName.toLowerCase(),
+                songName.replace(/[^\wа-яА-ЯёЁ\s\-]/g, '').trim(),
+                songName.replace(/\s+/g, '_'),
+                songName.replace(/\s+/g, '-'),
+            ];
+            
+            const uniqueVariants = [...new Set(variants.filter(v => v && v.length > 0))];
+            
+            for (const name of uniqueVariants) {
+                for (const format of formats) {
+                    const path = `${folder}${encodeURIComponent(name)}${format}`;
+                    try {
+                        const response = await fetch(path, { method: 'HEAD' });
+                        if (response.ok) {
+                            return path;
+                        }
+                    } catch(e) {}
+                }
+            }
+            
+            return null;
+        }
+
+        // ========== ПОСТРОЕНИЕ СПИСКА ПЕСЕН ==========
+        if (season && season.dev) {
+            songList.innerHTML = `
+                <div class="tg-message">
+                    <div class="tg-message-text" style="text-align:center; padding: 30px 0;">
+                        🚧 Этот сезон в разработке<br>🎵 Появится позже!
+                    </div>
+                </div>
+                <div class="tg-reply-markup">
+                    <button class="tg-btn-start" onclick="window.location.href='seasons.html'">🔙 НАЗАД</button>
+                </div>
+            `;
+        } else {
+            songs.forEach((song, index) => {
+                const displayName = song.name || song;
+                const item = document.createElement('div');
+                item.className = 'tg-song-item';
+                item.innerHTML = `
+                    <div class="tg-song-name">🎵 ${displayName}</div>
+                    <div class="tg-song-actions">
+                        <button class="tg-btn-inline-small" onclick="playSong('${seasonId}', ${index})">▶️ Слушать</button>
+                        <button class="tg-btn-inline-small" onclick="downloadSong('${seasonId}', ${index})">⬇️</button>
+                    </div>
+                `;
+                songList.appendChild(item);
+            });
+        }
+
+        // ========== ВОСПРОИЗВЕДЕНИЕ ==========
+        async function playSong(seasonId, index) {
+            const season = SEASONS[seasonId];
+            const song = season.songs[index];
+            const folder = season.folder;
+            const songPath = await findAudioFile(folder, song);
+
+            const displayName = song.name || song;
+            currentSong = displayName;
+            currentSongFile = songPath;
+            currentSongName.textContent = displayName;
+            currentSeasonName.textContent = season.name;
+
+            if (songPath) {
+                audioPlayer.src = songPath;
+                audioPlayer.load();
+                
+                audioPlayer.addEventListener('loadedmetadata', function() {
+                    audioPlayer.play().catch(e => {
+                        alert(`⚠️ Не удалось воспроизвести: ${displayName}\nПопробуйте скачать.`);
+                    });
+                }, { once: true });
+                
+                setTimeout(() => {
+                    if (audioPlayer.paused && audioPlayer.src) {
+                        audioPlayer.play().catch(() => {});
+                    }
+                }, 3000);
+                
+                playerBar.style.display = 'flex';
+                playPauseBtn.textContent = '⏸️';
+            } else {
+                alert(`⚠️ Файл не найден: ${displayName}\n\nПоложите файл в music/${folder}/\n\nПоддерживаются: MP3, M4A, MP4, OGG, WAV, AAC`);
+            }
+        }
+
+        // ========== СКАЧИВАНИЕ ==========
+        function downloadSong(seasonId, index) {
+            const season = SEASONS[seasonId];
+            const song = season.songs[index];
+            const folder = season.folder;
+            
+            const formats = ['.mp3', '.m4a', '.mp4', '.ogg', '.wav'];
+            const displayName = song.name || song;
+            for (const format of formats) {
+                const link = document.createElement('a');
+                link.href = `music/${folder}/${encodeURIComponent(displayName)}${format}`;
+                link.download = `${displayName}${format}`;
+                link.click();
+            }
+        }
+
+        function downloadCurrentSong() {
+            if (currentSongFile) {
+                const link = document.createElement('a');
+                link.href = currentSongFile;
+                link.download = currentSongFile.split('/').pop();
+                link.click();
+            }
+        }
+
+        // ========== УПРАВЛЕНИЕ ПЛЕЕРОМ ==========
+        audioPlayer.addEventListener('play', () => playPauseBtn.textContent = '⏸️');
+        audioPlayer.addEventListener('pause', () => playPauseBtn.textContent = '▶️');
+        audioPlayer.addEventListener('ended', () => {
+            progressBar.value = 0;
+            timeDisplay.textContent = '0:00';
+            playPauseBtn.textContent = '▶️';
+        });
+
+        playPauseBtn.addEventListener('click', () => {
+            if (audioPlayer.paused) audioPlayer.play();
+            else audioPlayer.pause();
+        });
+
+        audioPlayer.addEventListener('timeupdate', () => {
+            if (!isUserSeeking && audioPlayer.duration) {
+                const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressBar.value = percent;
+                const minutes = Math.floor(audioPlayer.currentTime / 60);
+                const seconds = Math.floor(audioPlayer.currentTime % 60);
+                timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+        });
+
+        progressBar.addEventListener('input', (e) => {
+            isUserSeeking = true;
+            if (audioPlayer.duration) {
+                const time = (e.target.value / 100) * audioPlayer.duration;
+                audioPlayer.currentTime = time;
+                const minutes = Math.floor(time / 60);
+                const seconds = Math.floor(time % 60);
+                timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+        });
+        progressBar.addEventListener('change', () => isUserSeeking = false);
+    </script>
+</body>
+</html>
