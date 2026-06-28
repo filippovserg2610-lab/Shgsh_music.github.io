@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Сезоны</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="telegram-app">
+        <div class="tg-header">
+            <button class="tg-back-btn" onclick="window.location.href='index.html'">‹</button>
+            <div class="tg-header-title">Архив ШГШ</div>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <div class="tg-content">
+            <div class="tg-message">
+                <div class="tg-message-text">
+                    👇 <strong>Выбери сезон или раздел:</strong>
+                </div>
+            </div>
+
+            <!-- Кнопки сезонов (как в скриншоте) -->
+            <div class="tg-inline-grid" id="seasonsGrid">
+                <button class="tg-inline-btn" onclick="window.location.href='playlist.html?season=8'">✅ 8 СЕЗОН</button>
+                <button class="tg-inline-btn" onclick="window.location.href='playlist.html?season=7'">❌ 7 СЕЗОН</button>
+                <button class="tg-inline-btn" onclick="window.location.href='playlist.html?season=6'">❤️ 6 СЕЗОН</button>
+                <button class="tg-inline-btn" onclick="window.location.href='playlist.html?season=5'">❌ 5 СЕЗОН</button>
+                <button class="tg-inline-btn" onclick="window.location.href='playlist.html?season=4'">❌ 4 СЕЗОН</button>
+                <button class="tg-inline-btn" onclick="window.location.href='playlist.html?season=3'">⏳ 3 СЕЗОН</button>
+                <button class="tg-inline-btn" onclick="window.location.href='playlist.html?season=2'">⏳ 2 СЕЗОН</button>
+                <button class="tg-inline-btn" onclick="window.location.href='playlist.html?season=1'">⏳ 1 СЕЗОН</button>
+                <button class="tg-inline-btn" onclick="window.location.href='playlist.html?season=0'">🎙️ РЕМИКСЫ</button>
+                <button class="tg-inline-btn" onclick="window.location.href='playlist.html?season=temp'">🔄 ВРЕМЕННЫЕ ОРИГИНАЛЫ</button>
+                <button class="tg-inline-btn tg-inline-btn-wide" onclick="window.location.href='channels.html'">📢 официальные каналы</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
