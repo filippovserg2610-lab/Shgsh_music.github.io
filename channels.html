@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Каналы ШГШ</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="telegram-app" id="app">
+        <div class="color-dots-left">
+            <div class="color-dot" data-color="white" style="background: #ffffff;" onclick="changeTheme('white')"></div>
+            <div class="color-dot" data-color="red" style="background: #ff4444;" onclick="changeTheme('red')"></div>
+            <div class="color-dot" data-color="yellow" style="background: #ffdd00;" onclick="changeTheme('yellow')"></div>
+            <div class="color-dot" data-color="purple" style="background: #9b59b6;" onclick="changeTheme('purple')"></div>
+        </div>
+        <div class="color-dots-right">
+            <div class="color-dot" data-color="black" style="background: #222222;" onclick="changeTheme('black')"></div>
+            <div class="color-dot" data-color="green" style="background: #2ecc71;" onclick="changeTheme('green')"></div>
+            <div class="color-dot" data-color="blue" style="background: #3498db;" onclick="changeTheme('blue')"></div>
+            <div class="color-dot" data-color="orange" style="background: #e67e22;" onclick="changeTheme('orange')"></div>
+        </div>
+
+        <div class="tg-header">
+            <button class="tg-back-btn" data-comet href="seasons.html">‹</button>
+            <div class="tg-header-title">Каналы ШГШ</div>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <div class="tg-content">
+            <div class="tg-message"><div class="tg-message-text">👇 <strong>Подписывайся на каналы:</strong></div></div>
+            <div class="tg-inline-grid" id="channelsGrid">
+                <button class="tg-inline-btn tg-inline-btn-wide" onclick="window.open('https://t.me/hladenko', '_blank')">короче, Гладенко</button>
+                <button class="tg-inline-btn tg-inline-btn-wide" onclick="window.open('https://t.me/shgsh_novosti', '_blank')">Школьный Дневник ШГШ</button>
+                <button class="tg-inline-btn tg-inline-btn-wide" onclick="window.open('https://t.me/kseshaxs', '_blank')">ксеша 🐈‍⬛🐾</button>
+                <button class="tg-inline-btn tg-inline-btn-wide" onclick="window.open('https://t.me/dimonchikshgsh', '_blank')">это Дима ШГШ</button>
+                <button class="tg-inline-btn tg-inline-btn-wide" onclick="window.open('https://t.me/vladanasv', '_blank')">Владошка 🔇</button>
+                <button class="tg-inline-btn tg-inline-btn-wide" onclick="window.open('https://t.me/derzkaya_myxa', '_blank')">Жизнь дерзкой Мухи</button>
+                <button class="tg-inline-btn tg-inline-btn-wide" data-transition href="seasons.html">🔙 НАЗАД</button>
+            </div>
+        </div>
+
+        <div class="footer-credit">создал Акрапович Михаил Саныч</div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function changeTheme(color) {
+            const app = document.getElementById('app');
+            app.className = 'telegram-app';
+            app.classList.add('theme-' + color);
+            localStorage.setItem('theme', color);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.getElementById('app').classList.add('theme-' + savedTheme);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,939 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #0a0a0a;
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.telegram-app {
+    max-width: 480px;
+    width: 100%;
+    min-height: 100vh;
+    background: #0f0f1a;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ===== ШАПКА ===== */
+.tg-header {
+    background: #1a1a2e;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #2a2a4a;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    min-height: 52px;
+}
+
+.tg-back-btn {
+    background: none;
+    border: none;
+    color: #6c5ce7;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0 4px;
+    width: 40px;
+    text-align: left;
+    font-weight: 300;
+}
+
+.tg-back-btn:hover {
+    opacity: 0.7;
+}
+
+.tg-header-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #ffffff;
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tg-header-subtitle {
+    font-size: 11px;
+    color: #8888aa;
+    text-align: center;
+    margin-top: -2px;
+}
+
+/* ===== ПРОФИЛЬ ===== */
+.tg-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 12px;
+    border-bottom: 1px solid #1a1a2e;
+    position: relative;
+    z-index: 2;
+}
+
+.tg-profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #6c5ce7;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.tg-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.tg-profile-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.tg-profile-bio {
+    font-size: 14px;
+    color: #8888aa;
+    text-align: center;
+    line-height: 1.4;
+    max-width: 320px;
+}
+
+/* ===== ОКЕАН ===== */
+.ocean-scene {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    margin-top: 10px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #0a0e1a 0%, #0f1a2e 30%, #162a44 60%, #1a3a5a 80%, #0f1a2e 100%);
+    border-top: 1px solid #2a4a6a;
+    border-bottom: 1px solid #2a4a6a;
+}
+
+/* ===== ВОЛНЫ ===== */
+.wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    animation: waveMove 8s linear infinite;
+    opacity: 0.3;
+}
+.wave:nth-child(1) {
+    background: radial-gradient(ellipse at 20% 100%, rgba(30, 144, 255, 0.15) 0%, transparent 50%);
+    animation-duration: 6s;
+    opacity: 0.4;
+    bottom: -10px;
+}
+.wave:nth-child(2) {
+    background: radial-gradient(ellipse at 60% 100%, rgba(70, 130, 255, 0.12) 0%, transparent 60%);
+    animation-duration: 9s;
+    opacity: 0.3;
+    bottom: -5px;
+}
+.wave:nth-child(3) {
+    background: radial-gradient(ellipse at 80% 100%, rgba(100, 180, 255, 0.08) 0%, transparent 50%);
+    animation-duration: 7s;
+    opacity: 0.2;
+    bottom: 0px;
+}
+
+@keyframes waveMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ===== ПЛОТ ===== */
+.raft-container {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 120px;
+    animation: raftRock 3s ease-in-out infinite;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+@keyframes raftRock {
+    0% { transform: translateX(-50%) rotate(-2deg); }
+    50% { transform: translateX(-50%) rotate(4deg); }
+    100% { transform: translateX(-50%) rotate(-2deg); }
+}
+
+.raft {
+    position: relative;
+    width: 180px;
+    height: 28px;
+    background: linear-gradient(180deg, #8B6B4D, #6B4F3A);
+    border-radius: 4px 4px 12px 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 220, 180, 0.3);
+    border: 1px solid #5a3f2a;
+}
+
+.raft::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 8px;
+    right: 8px;
+    height: 6px;
+    background: repeating-linear-gradient(
+        90deg,
+        #7a5a3a 0px, #7a5a3a 20px,
+        #5a3f2a 20px, #5a3f2a 22px,
+        #7a5a3a 22px, #7a5a3a 42px,
+        #5a3f2a 42px, #5a3f2a 44px,
+        #7a5a3a 44px, #7a5a3a 64px,
+        #5a3f2a 64px, #5a3f2a 66px,
+        #7a5a3a 66px
+    );
+    border-radius: 4px;
+    opacity: 0.6;
+}
+
+.raft::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -6px;
+    right: -6px;
+    height: 6px;
+    background: repeating-linear-gradient(
+        90deg,
+        #8a7a5a 0px, #8a7a5a 8px,
+        transparent 8px, transparent 12px,
+        #8a7a5a 12px, #8a7a5a 20px,
+        transparent 20px, transparent 24px,
+        #8a7a5a 24px
+    );
+    border-radius: 2px;
+    opacity: 0.4;
+}
+
+.raft-rail {
+    position: absolute;
+    top: -8px;
+    left: 10px;
+    right: 10px;
+    height: 8px;
+    background: linear-gradient(180deg, #9a7a5a, #7a5a3a);
+    border-radius: 8px 8px 0 0;
+    opacity: 0.3;
+}
+
+.raft-btn {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    border: none;
+    border-radius: 50px;
+    color: #fff;
+    padding: 14px 28px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(108, 92, 231, 0.3);
+    position: relative;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    z-index: 10;
+    animation: btnGlow 2s ease-in-out infinite;
+}
+
+@keyframes btnGlow {
+    0% { box-shadow: 0 0 20px rgba(108, 92, 231, 0.3); transform: scale(1); }
+    50% { box-shadow: 0 0 60px rgba(108, 92, 231, 0.9), 0 0 120px rgba(108, 92, 231, 0.4); transform: scale(1.05); }
+    100% { box-shadow: 0 0 20px rgba(108, 92, 231, 0.3); transform: scale(1); }
+}
+
+.raft-btn::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), rgba(162, 155, 254, 0.1));
+    filter: blur(10px);
+    z-index: -1;
+    animation: btnPulse 2s ease-in-out infinite;
+}
+
+@keyframes btnPulse {
+    0% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0.3; transform: scale(1); }
+}
+
+.raft-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 40px rgba(108, 92, 231, 0.5);
+}
+
+/* ===== ЗВЁЗДЫ ===== */
+.stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    pointer-events: none;
+    z-index: 0;
+}
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite;
+}
+@keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+.star:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+.star:nth-child(2) { top: 20%; left: 30%; animation-delay: 0.5s; width: 3px; height: 3px; }
+.star:nth-child(3) { top: 5%; left: 50%; animation-delay: 1s; }
+.star:nth-child(4) { top: 15%; left: 70%; animation-delay: 1.5s; width: 3px; height: 3px; }
+.star:nth-child(5) { top: 25%; left: 85%; animation-delay: 2s; }
+.star:nth-child(6) { top: 8%; left: 20%; animation-delay: 0.8s; }
+.star:nth-child(7) { top: 18%; left: 60%; animation-delay: 1.2s; width: 4px; height: 4px; }
+.star:nth-child(8) { top: 28%; left: 40%; animation-delay: 0.3s; }
+.star:nth-child(9) { top: 12%; left: 80%; animation-delay: 1.8s; }
+.star:nth-child(10) { top: 22%; left: 15%; animation-delay: 2.2s; width: 3px; height: 3px; }
+
+.foam {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 200%;
+    height: 20px;
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.03) 0px,
+        rgba(255, 255, 255, 0.03) 30px,
+        transparent 30px,
+        transparent 60px
+    );
+    animation: waveMove 12s linear infinite;
+    opacity: 0.3;
+    z-index: 1;
+    border-radius: 50%;
+}
+
+/* ===== КОНТЕНТ ===== */
+.tg-content {
+    flex: 1;
+    padding: 12px 16px 100px;
+    overflow-y: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.tg-message {
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    border: 1px solid #2a2a4a;
+}
+
+.tg-message-text {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #e0e0e0;
+}
+
+.tg-message-text strong {
+    color: #ffffff;
+}
+
+/* ===== INLINE КНОПКИ ===== */
+.tg-inline-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.tg-inline-btn {
+    background: #1a1a2e;
+    border: 1px solid #2a2a4a;
+    border-radius: 10px;
+    color: #6c5ce7;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tg-inline-btn:active {
+    background: #2a2a4a;
+    transform: scale(0.96);
+}
+
+.tg-inline-btn-wide {
+    grid-column: 1 / -1;
+}
+
+/* ===== ПЕСНИ ===== */
+.tg-song-item {
+    background: #1a1a2e;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #2a2a4a;
+}
+
+.tg-song-name {
+    font-size: 14px;
+    color: #e0e0e0;
+    flex: 1;
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tg-song-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.tg-btn-inline-small {
+    background: #2a2a4a;
+    border: none;
+    border-radius: 8px;
+    color: #6c5ce7;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.tg-btn-inline-small:active {
+    background: #3a3a5a;
+    transform: scale(0.92);
+}
+
+/* ===== ПЛЕЕР ===== */
+.tg-player {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 480px;
+    width: 100%;
+    background: #1a1a2e;
+    border-top: 1px solid #2a2a4a;
+    padding: 10px 16px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+}
+
+.tg-player-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: all 0.15s;
+}
+
+.tg-player-btn:active {
+    transform: scale(0.9);
+}
+
+.tg-player-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.tg-player-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tg-player-subtitle {
+    font-size: 12px;
+    color: #8888aa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ===== ПОДПИСЬ ===== */
+.footer-credit {
+    position: fixed;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 1px;
+    z-index: 10;
+    font-weight: 300;
+    text-align: center;
+    pointer-events: none;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== ЦВЕТНЫЕ КРУЖОЧКИ ===== */
+.color-dots-left,
+.color-dots-right {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+    padding: 8px;
+}
+.color-dots-left { left: 4px; }
+.color-dots-right { right: 4px; }
+
+.color-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.color-dot:hover { transform: scale(1.3); border-color: rgba(255, 255, 255, 0.8); }
+.color-dot:active { transform: scale(0.9); }
+
+/* ===== ДЕРЕВЬЯ ===== */
+.trees-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+.tree {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: treeSway 3s ease-in-out infinite;
+}
+.tree-1 { left: 5%; animation-delay: 0s; }
+.tree-2 { left: 20%; animation-delay: 0.5s; }
+.tree-3 { left: 45%; animation-delay: 1s; }
+.tree-4 { left: 75%; animation-delay: 1.5s; }
+
+.tree-trunk {
+    width: 6px;
+    height: 40px;
+    background: linear-gradient(180deg, #5a3f2a, #3d2b1a);
+    border-radius: 2px;
+}
+.tree-crown {
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(ellipse at 30% 30%, #2d8a4e, #1a5a2a);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    margin-bottom: -6px;
+    box-shadow: 0 10px 30px rgba(0, 50, 0, 0.3);
+}
+@keyframes treeSway {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(5deg); }
+}
+
+/* ===== ВЕТЕР ===== */
+.wind-line {
+    position: absolute;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    animation: windBlow 4s linear infinite;
+}
+.wind-1 { top: 20%; width: 80px; animation-duration: 3s; animation-delay: 0s; }
+.wind-2 { top: 40%; width: 120px; animation-duration: 4.5s; animation-delay: 0.8s; }
+.wind-3 { top: 60%; width: 60px; animation-duration: 3.5s; animation-delay: 1.5s; }
+
+@keyframes windBlow {
+    0% { transform: translateX(-100px); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateX(calc(100vw + 100px)); opacity: 0; }
+}
+
+/* ===== АНИМАЦИЯ ПЕРЕХОДОВ ===== */
+.page-transition-in {
+    animation: slideInFromRight 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    overflow: hidden;
+}
+@keyframes slideInFromRight {
+    0% { transform: translateX(100%); opacity: 0.5; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+.page-transition-out {
+    animation: slideOutToLeft 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+    overflow: hidden;
+}
+@keyframes slideOutToLeft {
+    0% { transform: translateX(0); opacity: 1; }
+    100% { transform: translateX(-100%); opacity: 0.3; }
+}
+
+/* ===== КОМЕТА ===== */
+.comet-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.comet-container.active { opacity: 1; }
+
+.comet {
+    position: absolute;
+    top: -10%;
+    right: -20%;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle at 30% 30%, #fff, #ffdd44, #ff8800, transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 80px rgba(255, 200, 50, 0.8), 0 0 200px rgba(255, 150, 0, 0.5);
+    transform: rotate(-45deg) scale(0.3);
+    opacity: 0;
+    transition: all 2.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.comet-container.active .comet {
+    transform: rotate(-45deg) translate(80vw, 60vh) scale(1.5);
+    opacity: 1;
+    box-shadow: 0 0 120px rgba(255, 200, 50, 1), 0 0 300px rgba(255, 150, 0, 0.8);
+}
+
+.comet-glow {
+    position: absolute;
+    top: -10%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(ellipse at 70% 50%, rgba(255, 200, 50, 0.4), transparent 70%);
+    border-radius: 50%;
+    transform: rotate(-45deg) scale(0.3);
+    opacity: 0;
+    transition: all 2.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.comet-container.active .comet-glow {
+    transform: rotate(-45deg) translate(70vw, 50vh) scale(2);
+    opacity: 1;
+}
+
+.comet-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+.comet-flash.active { opacity: 1; transition: opacity 0.1s ease; }
+
+/* ===== ТЕМЫ ===== */
+/* Белая */
+.theme-white .telegram-app { background: #f5f5f5; }
+.theme-white .tg-header { background: #ffffff; border-bottom: 1px solid #e0e0e0; }
+.theme-white .tg-header-title { color: #222; }
+.theme-white .tg-message { background: #ffffff; border-color: #e0e0e0; }
+.theme-white .tg-message-text { color: #333; }
+.theme-white .tg-message-text strong { color: #111; }
+.theme-white .tg-inline-btn { background: #ffffff; border-color: #ddd; color: #6c5ce7; }
+.theme-white .tg-inline-btn:active { background: #f0f0f0; }
+.theme-white .tg-song-item { background: #ffffff; border-color: #e0e0e0; }
+.theme-white .tg-song-name { color: #333; }
+.theme-white .footer-credit { color: rgba(0, 0, 0, 0.2); }
+.theme-white .tree-crown { background: radial-gradient(ellipse at 30% 30%, #3da55e, #1a5a2a); }
+
+/* Красная */
+.theme-red .telegram-app { background: #1a0a0a; }
+.theme-red .tg-header { background: #2a0a0a; border-bottom: 1px solid #4a1a1a; }
+.theme-red .tg-header-title { color: #ff6666; }
+.theme-red .tg-message { background: #2a0a0a; border-color: #4a1a1a; }
+.theme-red .tg-message-text { color: #ffaaaa; }
+.theme-red .tg-message-text strong { color: #ff6666; }
+.theme-red .tg-inline-btn { background: #2a0a0a; border-color: #4a1a1a; color: #ff6666; }
+.theme-red .tg-inline-btn:active { background: #3a0a0a; }
+.theme-red .tg-song-item { background: #2a0a0a; border-color: #4a1a1a; }
+.theme-red .tg-song-name { color: #ffaaaa; }
+.theme-red .footer-credit { color: rgba(255, 100, 100, 0.2); }
+.theme-red .tree-crown { background: radial-gradient(ellipse at 30% 30%, #8a2a2a, #5a1a1a); }
+
+/* Жёлтая */
+.theme-yellow .telegram-app { background: #1a1a0a; }
+.theme-yellow .tg-header { background: #2a2a0a; border-bottom: 1px solid #4a4a1a; }
+.theme-yellow .tg-header-title { color: #ffdd44; }
+.theme-yellow .tg-message { background: #2a2a0a; border-color: #4a4a1a; }
+.theme-yellow .tg-message-text { color: #ddcc88; }
+.theme-yellow .tg-message-text strong { color: #ffdd44; }
+.theme-yellow .tg-inline-btn { background: #2a2a0a; border-color: #4a4a1a; color: #ffdd44; }
+.theme-yellow .tg-inline-btn:active { background: #3a3a0a; }
+.theme-yellow .tg-song-item { background: #2a2a0a; border-color: #4a4a1a; }
+.theme-yellow .tg-song-name { color: #ddcc88; }
+.theme-yellow .footer-credit { color: rgba(255, 220, 68, 0.2); }
+.theme-yellow .tree-crown { background: radial-gradient(ellipse at 30% 30%, #8a8a2a, #5a5a1a); }
+
+/* Фиолетовая */
+.theme-purple .telegram-app { background: #0a0a1a; }
+.theme-purple .tg-header { background: #1a0a2a; border-bottom: 1px solid #3a1a4a; }
+.theme-purple .tg-header-title { color: #bb66ff; }
+.theme-purple .tg-message { background: #1a0a2a; border-color: #3a1a4a; }
+.theme-purple .tg-message-text { color: #cc99ff; }
+.theme-purple .tg-message-text strong { color: #bb66ff; }
+.theme-purple .tg-inline-btn { background: #1a0a2a; border-color: #3a1a4a; color: #bb66ff; }
+.theme-purple .tg-inline-btn:active { background: #2a0a3a; }
+.theme-purple .tg-song-item { background: #1a0a2a; border-color: #3a1a4a; }
+.theme-purple .tg-song-name { color: #cc99ff; }
+.theme-purple .footer-credit { color: rgba(180, 100, 255, 0.2); }
+.theme-purple .tree-crown { background: radial-gradient(ellipse at 30% 30%, #5a2a8a, #3a1a5a); }
+
+/* Чёрная */
+.theme-black .telegram-app { background: #050505; }
+.theme-black .tg-header { background: #0a0a0a; border-bottom: 1px solid #1a1a1a; }
+.theme-black .tg-header-title { color: #888; }
+.theme-black .tg-message { background: #0a0a0a; border-color: #1a1a1a; }
+.theme-black .tg-message-text { color: #666; }
+.theme-black .tg-message-text strong { color: #aaa; }
+.theme-black .tg-inline-btn { background: #0a0a0a; border-color: #1a1a1a; color: #888; }
+.theme-black .tg-inline-btn:active { background: #1a1a1a; }
+.theme-black .tg-song-item { background: #0a0a0a; border-color: #1a1a1a; }
+.theme-black .tg-song-name { color: #666; }
+.theme-black .footer-credit { color: rgba(255, 255, 255, 0.05); }
+.theme-black .tree-crown { background: radial-gradient(ellipse at 30% 30%, #2a2a2a, #111); }
+
+/* Зелёная */
+.theme-green .telegram-app { background: #0a1a0a; }
+.theme-green .tg-header { background: #0a2a0a; border-bottom: 1px solid #1a4a1a; }
+.theme-green .tg-header-title { color: #44dd66; }
+.theme-green .tg-message { background: #0a2a0a; border-color: #1a4a1a; }
+.theme-green .tg-message-text { color: #88dd88; }
+.theme-green .tg-message-text strong { color: #44dd66; }
+.theme-green .tg-inline-btn { background: #0a2a0a; border-color: #1a4a1a; color: #44dd66; }
+.theme-green .tg-inline-btn:active { background: #1a3a0a; }
+.theme-green .tg-song-item { background: #0a2a0a; border-color: #1a4a1a; }
+.theme-green .tg-song-name { color: #88dd88; }
+.theme-green .footer-credit { color: rgba(68, 221, 102, 0.2); }
+.theme-green .tree-crown { background: radial-gradient(ellipse at 30% 30%, #2a8a4a, #1a5a2a); }
+
+/* Синяя */
+.theme-blue .telegram-app { background: #0a0a1a; }
+.theme-blue .tg-header { background: #0a1a2a; border-bottom: 1px solid #1a3a4a; }
+.theme-blue .tg-header-title { color: #4488ff; }
+.theme-blue .tg-message { background: #0a1a2a; border-color: #1a3a4a; }
+.theme-blue .tg-message-text { color: #88aadd; }
+.theme-blue .tg-message-text strong { color: #4488ff; }
+.theme-blue .tg-inline-btn { background: #0a1a2a; border-color: #1a3a4a; color: #4488ff; }
+.theme-blue .tg-inline-btn:active { background: #1a2a3a; }
+.theme-blue .tg-song-item { background: #0a1a2a; border-color: #1a3a4a; }
+.theme-blue .tg-song-name { color: #88aadd; }
+.theme-blue .footer-credit { color: rgba(68, 136, 255, 0.2); }
+.theme-blue .tree-crown { background: radial-gradient(ellipse at 30% 30%, #2a5a8a, #1a3a5a); }
+
+/* Оранжевая */
+.theme-orange .telegram-app { background: #1a0a0a; }
+.theme-orange .tg-header { background: #2a1a0a; border-bottom: 1px solid #4a3a1a; }
+.theme-orange .tg-header-title { color: #ff8833; }
+.theme-orange .tg-message { background: #2a1a0a; border-color: #4a3a1a; }
+.theme-orange .tg-message-text { color: #dd9966; }
+.theme-orange .tg-message-text strong { color: #ff8833; }
+.theme-orange .tg-inline-btn { background: #2a1a0a; border-color: #4a3a1a; color: #ff8833; }
+.theme-orange .tg-inline-btn:active { background: #3a2a0a; }
+.theme-orange .tg-song-item { background: #2a1a0a; border-color: #4a3a1a; }
+.theme-orange .tg-song-name { color: #dd9966; }
+.theme-orange .footer-credit { color: rgba(255, 136, 51, 0.2); }
+.theme-orange .tree-crown { background: radial-gradient(ellipse at 30% 30%, #8a5a2a, #5a3a1a); }
+
+/* ===== ОКЕАН И ПЛОТ НЕ МЕНЯЮТ ЦВЕТ ===== */
+.theme-white .ocean-scene,
+.theme-red .ocean-scene,
+.theme-yellow .ocean-scene,
+.theme-purple .ocean-scene,
+.theme-black .ocean-scene,
+.theme-green .ocean-scene,
+.theme-blue .ocean-scene,
+.theme-orange .ocean-scene {
+    background: linear-gradient(180deg, #0a0e1a 0%, #0f1a2e 30%, #162a44 60%, #1a3a5a 80%, #0f1a2e 100%) !important;
+    border-top: 1px solid #2a4a6a !important;
+    border-bottom: 1px solid #2a4a6a !important;
+}
+.theme-white .raft,
+.theme-red .raft,
+.theme-yellow .raft,
+.theme-purple .raft,
+.theme-black .raft,
+.theme-green .raft,
+.theme-blue .raft,
+.theme-orange .raft {
+    background: linear-gradient(180deg, #8B6B4D, #6B4F3A) !important;
+    border: 1px solid #5a3f2a !important;
+}
+.theme-white .raft::before,
+.theme-red .raft::before,
+.theme-yellow .raft::before,
+.theme-purple .raft::before,
+.theme-black .raft::before,
+.theme-green .raft::before,
+.theme-blue .raft::before,
+.theme-orange .raft::before {
+    background: repeating-linear-gradient(
+        90deg,
+        #7a5a3a 0px, #7a5a3a 20px,
+        #5a3f2a 20px, #5a3f2a 22px,
+        #7a5a3a 22px, #7a5a3a 42px,
+        #5a3f2a 42px, #5a3f2a 44px,
+        #7a5a3a 44px, #7a5a3a 64px,
+        #5a3f2a 64px, #5a3f2a 66px,
+        #7a5a3a 66px
+    ) !important;
+}
+.theme-white .raft-rail,
+.theme-red .raft-rail,
+.theme-yellow .raft-rail,
+.theme-purple .raft-rail,
+.theme-black .raft-rail,
+.theme-green .raft-rail,
+.theme-blue .raft-rail,
+.theme-orange .raft-rail {
+    background: linear-gradient(180deg, #9a7a5a, #7a5a3a) !important;
+}
+.theme-white .raft-btn,
+.theme-red .raft-btn,
+.theme-yellow .raft-btn,
+.theme-purple .raft-btn,
+.theme-black .raft-btn,
+.theme-green .raft-btn,
+.theme-blue .raft-btn,
+.theme-orange .raft-btn {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe) !important;
+    box-shadow: 0 0 30px rgba(108, 92, 231, 0.3) !important;
+}
+.theme-white .raft-btn::after,
+.theme-red .raft-btn::after,
+.theme-yellow .raft-btn::after,
+.theme-purple .raft-btn::after,
+.theme-black .raft-btn::after,
+.theme-green .raft-btn::after,
+.theme-blue .raft-btn::after,
+.theme-orange .raft-btn::after {
+    background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), rgba(162, 155, 254, 0.1)) !important;
+}
+.theme-white .wave,
+.theme-red .wave,
+.theme-yellow .wave,
+.theme-purple .wave,
+.theme-black .wave,
+.theme-green .wave,
+.theme-blue .wave,
+.theme-orange .wave {
+    opacity: 0.3 !important;
+}
+.theme-white .star,
+.theme-red .star,
+.theme-yellow .star,
+.theme-purple .star,
+.theme-black .star,
+.theme-green .star,
+.theme-blue .star,
+.theme-orange .star {
+    background: #fff !important;
+}
+.theme-white .foam,
+.theme-red .foam,
+.theme-yellow .foam,
+.theme-purple .foam,
+.theme-black .foam,
+.theme-green .foam,
+.theme-blue .foam,
+.theme-orange .foam {
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.03) 0px,
+        rgba(255, 255, 255, 0.03) 30px,
+        transparent 30px,
+        transparent 60px
+    ) !important;
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 480px) {
+    .telegram-app { max-width: 100%; }
+    .ocean-scene { height: 220px; }
+    .raft-container { width: 160px; height: 100px; bottom: 30px; }
+    .raft { width: 140px; height: 24px; }
+    .raft-btn { padding: 12px 20px; font-size: 16px; }
+    .color-dots-left, .color-dots-right { gap: 6px; padding: 4px; }
+    .color-dot { width: 14px; height: 14px; }
+    .color-dots-left { left: 2px; }
+    .color-dots-right { right: 2px; }
+}
+
+@media (max-width: 360px) {
+    .ocean-scene { height: 180px; }
+    .raft-container { width: 130px; height: 80px; bottom: 20px; }
+    .raft { width: 120px; height: 20px; }
+    .raft-btn { padding: 10px 16px; font-size: 14px; }
+    .tg-inline-grid { grid-template-columns: 1fr; }
+    .tg-btn-inline-small { padding: 4px 10px; font-size: 12px; }
+    .color-dot { width: 12px; height: 12px; }
+}
