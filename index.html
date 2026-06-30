@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>ШГШ Музыка</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="telegram-app" id="app">
+        <!-- Цветные кружочки -->
+        <div class="color-dots-left">
+            <div class="color-dot" data-color="white" style="background: #ffffff;" onclick="changeTheme('white')"></div>
+            <div class="color-dot" data-color="red" style="background: #ff4444;" onclick="changeTheme('red')"></div>
+            <div class="color-dot" data-color="yellow" style="background: #ffdd00;" onclick="changeTheme('yellow')"></div>
+            <div class="color-dot" data-color="purple" style="background: #9b59b6;" onclick="changeTheme('purple')"></div>
+        </div>
+        <div class="color-dots-right">
+            <div class="color-dot" data-color="black" style="background: #222222;" onclick="changeTheme('black')"></div>
+            <div class="color-dot" data-color="green" style="background: #2ecc71;" onclick="changeTheme('green')"></div>
+            <div class="color-dot" data-color="blue" style="background: #3498db;" onclick="changeTheme('blue')"></div>
+            <div class="color-dot" data-color="orange" style="background: #e67e22;" onclick="changeTheme('orange')"></div>
+        </div>
+
+        <!-- Шапка -->
+        <div class="tg-header">
+            <div class="tg-header-title">🎵 ШГШ песни</div>
+            <div class="tg-header-subtitle">remake</div>
+        </div>
+
+        <!-- Профиль -->
+        <div class="tg-profile">
+            <div class="tg-profile-avatar">
+                <img src="avatar.png" alt="avatar" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2280%22 viewBox=%220 0 80 80%22%3E%3Crect width=%2280%22 height=%2280%22 fill=%22%236c5ce7%22/%3E%3Ctext x=%2240%22 y=%2248%22 text-anchor=%22middle%22 font-size=%2236%22 fill=%22white%22 font-family=%22Arial%22%3E🎵%3C/text%3E%3C/svg%3E'" />
+            </div>
+            <div class="tg-profile-name">@Music_shgshbot</div>
+            <div class="tg-profile-bio">Бот по музыке ШГШ (школа глазами школьника) | создан фанатом!</div>
+        </div>
+
+        <!-- Океан -->
+        <div class="ocean-scene" id="oceanScene">
+            <div class="stars">
+                <div class="star"></div><div class="star"></div><div class="star"></div>
+                <div class="star"></div><div class="star"></div><div class="star"></div>
+                <div class="star"></div><div class="star"></div><div class="star"></div>
+                <div class="star"></div>
+            </div>
+            <div class="wave"></div><div class="wave"></div><div class="wave"></div>
+            <div class="foam"></div>
+            <div class="raft-container">
+                <button class="raft-btn" data-transition href="seasons.html">▶️ СТАРТ</button>
+                <div class="raft"><div class="raft-rail"></div></div>
+            </div>
+        </div>
+
+        <!-- Приветствие -->
+        <div class="tg-content">
+            <div class="tg-message">
+                <div class="tg-message-text">🎧 <strong>Добро пожаловать в музыкальный бот ШГШ!</strong></div>
+                <div class="tg-message-text" style="margin-top: 6px; opacity: 0.8;">Здесь ты найдёшь все треки из сезонов,<br>ремиксы и оригиналы</div>
+            </div>
+        </div>
+
+        <!-- Подпись -->
+        <div class="footer-credit">создал Акрапович Михаил Саныч</div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function changeTheme(color) {
+            const app = document.getElementById('app');
+            app.className = 'telegram-app';
+            app.classList.add('theme-' + color);
+            localStorage.setItem('theme', color);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.getElementById('app').classList.add('theme-' + savedTheme);
+            }
+        });
+    </script>
+</body>
+</html>

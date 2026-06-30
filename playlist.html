@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Плейлист</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="telegram-app" id="app">
+        <!-- Цветные кружочки -->
+        <div class="color-dots-left">
+            <div class="color-dot" data-color="white" style="background: #ffffff;" onclick="changeTheme('white')"></div>
+            <div class="color-dot" data-color="red" style="background: #ff4444;" onclick="changeTheme('red')"></div>
+            <div class="color-dot" data-color="yellow" style="background: #ffdd00;" onclick="changeTheme('yellow')"></div>
+            <div class="color-dot" data-color="purple" style="background: #9b59b6;" onclick="changeTheme('purple')"></div>
+        </div>
+        <div class="color-dots-right">
+            <div class="color-dot" data-color="black" style="background: #222222;" onclick="changeTheme('black')"></div>
+            <div class="color-dot" data-color="green" style="background: #2ecc71;" onclick="changeTheme('green')"></div>
+            <div class="color-dot" data-color="blue" style="background: #3498db;" onclick="changeTheme('blue')"></div>
+            <div class="color-dot" data-color="orange" style="background: #e67e22;" onclick="changeTheme('orange')"></div>
+        </div>
+
+        <!-- Шапка -->
+        <div class="tg-header">
+            <button class="tg-back-btn" data-comet href="seasons.html">‹</button>
+            <div class="tg-header-title" id="seasonTitle">СЕЗОН</div>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <!-- Список песен -->
+        <div class="tg-content" id="songList"></div>
+
+        <!-- Плеер -->
+        <div class="tg-player" id="playerBar" style="display:none;">
+            <button class="tg-player-btn" id="repeatBtn" onclick="toggleRepeat()">🔁</button>
+            <button class="tg-player-btn" onclick="prevSong()">⏮</button>
+            <button class="tg-player-btn" id="playPauseBtn" onclick="togglePlay()">▶</button>
+            <button class="tg-player-btn" onclick="nextSong()">⏭</button>
+            <button class="tg-player-btn" id="shuffleBtn" onclick="toggleShuffle()">🔀</button>
+
+            <div class="tg-player-info">
+                <div class="tg-player-title" id="currentSongName">Нет трека</div>
+                <div class="tg-player-subtitle" id="currentSeasonName"></div>
+            </div>
+
+            <div class="tg-player-progress">
+                <input type="range" id="progressBar" min="0" max="100" value="0" />
+                <div class="tg-player-time">
+                    <span id="timeDisplay">0:00</span>
+                    <span id="totalTime">0:00</span>
+                </div>
+            </div>
+
+            <div class="tg-player-menu">
+                <button class="tg-player-btn" onclick="toggleMenu()">⋮</button>
+                <div class="tg-player-dropdown" id="playerDropdown">
+                    <button onclick="downloadCurrentSong()">⬇️ Скачать</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-credit">создал Акрапович Михаил Саныч</div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const seasonId = params.get('season') || '8';
+        const season = SEASONS[seasonId];
+        const songs = season ? season.songs : [];
+        const seasonName = season ? season.name : 'СЕЗОН';
+        document.getElementById('seasonTitle').textContent = seasonName;
+        const songList = document.getElementById('songList');
+
+        // Восстановление состояния
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(updatePlayerUI, 100);
+            const saved = localStorage.getItem('playerState');
+            if (saved) {
+                try {
+                    const state = JSON.parse(saved);
+                    if (state.seasonId === seasonId && state.index !== undefined) {
+                        document.querySelectorAll('.tg-song-item').forEach((el, i) => {
+                            if (i === state.index) {
+                                el.style.borderColor = '#6c5ce7';
+                                el.style.background = 'rgba(108, 92, 231, 0.1)';
+                            }
+                        });
+                    }
+                } catch(e) {}
+            }
+        });
+
+        if (season && season.dev) {
+            songList.innerHTML = `
+                <div class="tg-message">
+                    <div class="tg-message-text" style="text-align:center; padding: 30px 0;">
+                        🚧 Этот сезон в разработке<br>🎵 Появится позже!
+                    </div>
+                </div>
+                <div class="tg-reply-markup">
+                    <button class="tg-btn-start" onclick="window.location.href='seasons.html'">🔙 НАЗАД</button>
+                </div>
+            `;
+        } else {
+            songs.forEach((song, index) => {
+                const displayName = song.name || song;
+                const item = document.createElement('div');
+                item.className = 'tg-song-item';
+                item.setAttribute('data-index', index);
+                item.innerHTML = `
+                    <div class="tg-song-name">🎵 ${displayName}</div>
+                    <div class="tg-song-actions">
+                        <button class="tg-btn-inline-small" onclick="playSong('${seasonId}', ${index})">▶️</button>
+                    </div>
+                `;
+                songList.appendChild(item);
+            });
+        }
+
+        function toggleMenu() {
+            const dropdown = document.getElementById('playerDropdown');
+            if (dropdown) dropdown.classList.toggle('active');
+        }
+
+        document.addEventListener('click', function(e) {
+            const menu = document.querySelector('.tg-player-menu');
+            if (menu && !menu.contains(e.target)) {
+                const dropdown = document.getElementById('playerDropdown');
+                if (dropdown) dropdown.classList.remove('active');
+            }
+        });
+
+        const progressBar = document.getElementById('progressBar');
+        if (progressBar) {
+            progressBar.addEventListener('input', function(e) {
+                if (window.player.audio && window.player.audio.duration) {
+                    const time = (e.target.value / 100) * window.player.audio.duration;
+                    window.player.audio.currentTime = time;
+                    const minutes = Math.floor(time / 60);
+                    const seconds = Math.floor(time % 60);
+                    document.getElementById('timeDisplay').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }
+            });
+        }
+
+        function changeTheme(color) {
+            const app = document.getElementById('app');
+            app.className = 'telegram-app';
+            app.classList.add('theme-' + color);
+            localStorage.setItem('theme', color);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.getElementById('app').classList.add('theme-' + savedTheme);
+            }
+        });
+    </script>
+</body>
+</html>
